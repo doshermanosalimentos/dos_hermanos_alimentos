@@ -174,3 +174,19 @@ document.head.appendChild(style);
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 });
+// Script para abrir/cerrar el menú hamburguesa
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if(menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Cerrar menú al tocar un link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+    });
