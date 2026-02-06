@@ -513,23 +513,39 @@ footer small {
       border-radius: 24px; 
       z-index: -1; 
     }
-/* AJUSTE PARA MÓVIL CON CARRITO */
-    .menu-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+<style>
+    /* RESET DE NAVEGACIÓN */
+    nav { position: fixed; top:0; width:100%; background: #ffffff; z-index: 1100; border-bottom: 1px solid #eee; height: 70px; display: flex; align-items: center; }
+    .nav-inner { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: relative; }
+    
+    .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
+    .brand-title { font-size: 18px; margin: 0; font-weight: 700; color: var(--text); }
+    
+    .nav-actions { display: flex; align-items: center; gap: 15px; }
+    .cart-btn { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 13px; }
+
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; }
+
+    /* BOTÓN HAMBURGUESA */
+    .menu-toggle { display: none; flex-direction: column; gap: 4px; background: none; border: none; cursor: pointer; padding: 5px; }
     .menu-toggle span { width: 22px; height: 3px; background: var(--accent); border-radius: 2px; }
 
-    @media (max-width: 768px) {
-      .menu-toggle { display: flex; } 
+    /* AJUSTES PARA CELULAR */
+     @media (max-width: 850px) {
+      .brand-title { font-size: 15px; } /* Texto más chico para que entre el logo */
+      .menu-toggle { display: flex; } /* Mostramos las rayitas */
       
       .nav-links { 
-        display: none; 
+        display: none; /* Escondemos los links horizontales */
         flex-direction: column; 
         position: absolute; 
-        top: 65px; left: 0; width: 100%; 
-        background: white; padding: 20px; 
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        gap: 15px;
-        z-index: 999;
+        top: 70px; left: 0; width: 100%; 
+        background: white; padding: 25px; 
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        gap: 20px; z-index: 1000;
       }
       
-      .nav-links.active { display: flex; }
+      .nav-links.active { display: flex; } /* Se muestra al tocar las rayitas */
     }
+</style>
