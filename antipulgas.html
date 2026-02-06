@@ -72,24 +72,35 @@
 </head>
 
 <body>
-  <nav>
-    <div class="nav-inner">
-      <a href="index.html" class="brand">
-        <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
-        <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Inicio</a>
-        <a href="perros.html">Perros</a>
-        <a href="gatos.html">Gatos</a>
-        <a href="accesorios.html">Accesorios y Snacks</a>
-        <a href="contacto.html">Contacto</a>
-        <button id="open-cart" style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">
-            🛒 (<span id="cart-count">0</span>)
-        </button>
-      </div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
+      <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
+    </a>
+
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <button id="open-cart" style="background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:20px; cursor:pointer; font-weight:bold; font-size: 13px;">
+          🛒 (<span id="cart-count">0</span>)
+      </button>
+
+      <button class="menu-toggle" id="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-  </nav>
+
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="perros.html">Perros</a>
+      <a href="gatos.html">Gatos</a>
+      <a href="accesorios.html">Accesorios</a>
+      <a href="antipulgas.html">Antipulgas</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </div>
+</nav>
 
   <header class="category-header">
     <h1>Antipulgas y Garrapatas</h1>
@@ -520,4 +531,5 @@
     renderCart();
   </script>
 </body>
+
 </html>
