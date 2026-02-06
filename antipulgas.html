@@ -3,71 +3,90 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dos Hermanos — Antipulgas & Garrapatas</title>
+  <title>Dos Hermanos — Protección Antipulgas</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent: #a67c52;
-      --accent-dark: #7a5c45;
-      --bg-light: #fdfaf5;
+      /* Paleta específica para Salud/Antipulgas */
+      --accent: #26a69a; 
+      --accent-dark: #00796b;
+      --bg-light: #f2fdfc;
       --text: #2d2d2d;
       --white: #ffffff;
       --muted: #7d7d7d;
     }
 
     html { scroll-behavior: smooth; }
-    body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; }
+    body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; padding-top: 70px; }
 
     /* NAVEGACIÓN */
-    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index:1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+    nav { position: fixed; top:0; width:100%; background: white; z-index:1100; border-bottom: 1px solid rgba(0,0,0,0.05); height: 70px; display: flex; align-items: center; }
+    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:0 20px; width: 100%; position: relative; }
+    
     .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
     .logo-mark { width:45px; height:45px; }
+    .brand-title { font-size: 20px; margin: 0; font-weight: 700; }
+
+    .nav-actions { display: flex; align-items: center; gap: 15px; }
+    .cart-btn { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 50px; cursor: pointer; font-weight: 700; }
+
     .nav-links { display:flex; gap:20px; }
     .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; }
 
-    /* CABECERA */
-    .category-header { padding: 120px 20px 60px; text-align: center; background: linear-gradient(to bottom, #fff, var(--bg-light)); }
-    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
-    .category-header p { max-width: 600px; margin: 15px auto; color: var(--muted); }
+    .menu-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .menu-toggle span { width: 25px; height: 3px; background: var(--accent); border-radius: 2px; }
 
-    /* FILTROS (ANCLAS) */
+    @media (max-width: 850px) {
+      .menu-toggle { display: flex; }
+      .nav-links { 
+        display: none; flex-direction: column; position: absolute; 
+        top: 70px; left: 0; width: 100%; background: white; 
+        padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); gap: 20px; text-align: center;
+      }
+      .nav-links.active { display: flex; }
+    }
+
+    /* CABECERA */
+    .category-header { padding: 60px 20px; text-align: center; background: white; }
+    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
+    .category-header p { color: var(--muted); margin-top: 10px; }
+
+    /* FILTROS */
     .filters { 
       max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;
-      display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+      display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
     }
-    .filters::-webkit-scrollbar { display: none; }
     .filter-link { 
-      padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd;
-      background: white; cursor: pointer; font-size: 14px; transition: 0.3s;
-      text-decoration: none; color: var(--text);
+      padding: 10px 25px; border-radius: 50px; border: 1px solid #ddd;
+      background: white; text-decoration: none; color: var(--text); font-weight: 600; transition: 0.3s; white-space: nowrap;
     }
     .filter-link:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-    /* SECTORES */
-    .sector-title { max-width: 1200px; margin: 40px auto 20px; padding: 0 20px; color: var(--accent-dark); font-size: 24px; scroll-margin-top: 100px; }
+    .sector-title { max-width: 1200px; margin: 60px auto 20px; padding: 0 20px; color: var(--accent-dark); font-size: 28px; border-left: 5px solid var(--accent); scroll-margin-top: 100px; }
 
-    /* GRID */
+    /* GRILLA DE PRODUCTOS */
     .products-grid { 
-      max-width: 1200px; margin: 0 auto 60px; 
+      max-width: 1200px; margin: 0 auto 80px; 
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
       gap: 30px; padding: 0 20px; 
     }
 
-    .product-card { background: white; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #f0f0f0; position: relative; }
-    .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-    .product-badge { position: absolute; top: 15px; left: 15px; background: #e57373; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; z-index: 2; }
-    .product-img { width: 100%; height: 250px; object-fit: contain; padding: 20px; box-sizing: border-box; background: #fff; }
+    .product-card { background: white; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #eee; position: relative; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(38, 166, 154, 0.15); }
+    
+    .product-img { width: 100%; height: 250px; object-fit: contain; padding: 20px; background: #fff; }
     .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; text-align: center; }
-    .product-info h3 { font-size: 17px; margin: 0 0 10px; color: var(--text); height: 45px; overflow: hidden; }
+    .product-info h3 { font-size: 16px; margin: 0 0 10px; height: 45px; overflow: hidden; }
     .price { font-size: 22px; font-weight: 700; color: var(--accent-dark); margin-bottom: 15px; }
-    .add-btn { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 15px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
+    
+    .add-btn { 
+      background: var(--accent); color: white; border: none; padding: 12px; 
+      border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%;
+      transition: 0.3s; margin-top: auto;
+    }
     .add-btn:hover { background: var(--accent-dark); }
 
-    /* CARRITO MODAL */
-    .cart-modal { position: fixed; top: 80px; right: 20px; width: 320px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 25px; display: none; z-index: 1100; max-height: 80vh; overflow-y: auto; }
-    
-    footer { background: #1a1a1a; color: white; padding: 60px 20px; text-align: center; margin-top: 40px; }
+    footer { background: #1a1a1a; color: white; padding: 40px 20px; text-align: center; }
   </style>
 </head>
 
@@ -78,25 +97,18 @@
       <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
       <h1 class="brand-title">Dos Hermanos</h1>
     </a>
-
     <div class="nav-actions">
-      <button id="open-cart" class="cart-btn">
-          🛒 (<span id="cart-count">0</span>)
-      </button>
-
+      <button id="open-cart" class="cart-btn">🛒 (<span id="cart-count">0</span>)</button>
       <button class="menu-toggle" id="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
-
     <div class="nav-links" id="nav-links">
       <a href="index.html">Inicio</a>
       <a href="perros.html">Perros</a>
       <a href="gatos.html">Gatos</a>
       <a href="accesorios.html">Accesorios</a>
-      <a href="antipulgas.html">Antipulgas</a>
+      <a href="antipulgas.html" style="color: var(--accent);">Antipulgas</a>
       <a href="contacto.html">Contacto</a>
     </div>
   </div>
@@ -533,4 +545,5 @@
 </body>
 
 </html>
+
 
