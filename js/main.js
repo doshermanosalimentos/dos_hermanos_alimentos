@@ -167,6 +167,23 @@ style.textContent = `
 .cart-overlay.active { display: block; }
 `;
 document.head.appendChild(style);
+<script>
+    // Lógica para el menú móvil
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita conflictos
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Cerrar el menú si se toca cualquier parte de la pantalla
+    document.addEventListener('click', () => {
+        if(navLinks) navLinks.classList.remove('active');
+    });
+</script>
 
 // =============================
 // Inicialización
@@ -174,19 +191,4 @@ document.head.appendChild(style);
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 });
-// Script para abrir/cerrar el menú hamburguesa
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
 
-    if(menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    }
-
-    // Cerrar menú al tocar un link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-        });
-    });
