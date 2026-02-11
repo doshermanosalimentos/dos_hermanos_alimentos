@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dos Hermanos — Antipulgas & Garrapatas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #a67c52;
+      --accent-dark: #7a5c45;
+      --bg-light: #fdfaf5;
+      --text: #2d2d2d;
+      --white: #ffffff;
+      --muted: #7d7d7d;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; }
+
+    /* NAVEGACIÓN */
+    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index:1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-mark { width:45px; height:45px; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; }
+
+    /* CABECERA */
+    .category-header { padding: 120px 20px 60px; text-align: center; background: linear-gradient(to bottom, #fff, var(--bg-light)); }
+    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
+    .category-header p { max-width: 600px; margin: 15px auto; color: var(--muted); }
+
+    /* FILTROS (ANCLAS) */
+    .filters { 
+      max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;
+      display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-link { 
+      padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd;
+      background: white; cursor: pointer; font-size: 14px; transition: 0.3s;
+      text-decoration: none; color: var(--text);
+    }
+    .filter-link:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* SECTORES */
+    .sector-title { max-width: 1200px; margin: 40px auto 20px; padding: 0 20px; color: var(--accent-dark); font-size: 24px; scroll-margin-top: 100px; }
+
+    /* GRID */
+    .products-grid { 
+      max-width: 1200px; margin: 0 auto 60px; 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 30px; padding: 0 20px; 
+    }
+
+    .product-card { background: white; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #f0f0f0; position: relative; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .product-badge { position: absolute; top: 15px; left: 15px; background: #e57373; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; z-index: 2; }
+    .product-img { width: 100%; height: 250px; object-fit: contain; padding: 20px; box-sizing: border-box; background: #fff; }
+    .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; text-align: center; }
+    .product-info h3 { font-size: 17px; margin: 0 0 10px; color: var(--text); height: 45px; overflow: hidden; }
+    .price { font-size: 22px; font-weight: 700; color: var(--accent-dark); margin-bottom: 15px; }
+    .add-btn { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 15px; cursor: pointer; font-weight: 600; width: 100%; transition: 0.3s; }
+    .add-btn:hover { background: var(--accent-dark); }
+
+    /* CARRITO MODAL */
+    .cart-modal { position: fixed; top: 80px; right: 20px; width: 320px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 25px; display: none; z-index: 1100; max-height: 80vh; overflow-y: auto; }
+    
+    footer { background: #1a1a1a; color: white; padding: 60px 20px; text-align: center; margin-top: 40px; }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
+        <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="perros.html">Perros</a>
+        <a href="gatos.html">Gatos</a>
+        <a href="accesorios.html">Accesorios y Snacks</a>
+        <a href="contacto.html">Contacto</a>
+       <button id="open-cart" style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">
+            🛒 (<span id="cart-count">0</span>)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="category-header">
+    <h1>Antipulgas y Garrapatas</h1>
+    <p>Protección efectiva para tu mascota durante todo el año. Comprimidos, pipetas y collares de las mejores marcas.</p>
+  </header>
+
+  <div class="filters">
+    <a href="#comprimidos" class="filter-link">Comprimidos</a>
+    <a href="#pipetas" class="filter-link">Pipetas</a>
+    <a href="#collares" class="filter-link">Collares</a>
+  </div>
+
+  <main>
+    <h2 class="sector-title" id="comprimidos">Comprimidos (Orales)</h2>
+    <div class="products-grid">
+
+      <div class="product-card" data-id="ap-nex-1" data-name="Nexgard 10 a 25kg" data-price="490">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard 10 a 25k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard 10 a 25kg (1 Tableta)</h3>
+          <div class="price">$ 490</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-nex-2" data-name="Nexgard 25 a 50kg" data-price="610">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard 25 a 50k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard 25 a 50kg (1 Tableta)</h3>
+          <div class="price">$ 610</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-nex-3" data-name="Nexgard 4 a 10kg" data-price="390">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard 4 a 10k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard 4 a 10kg (1 Tableta)</h3>
+          <div class="price">$ 390</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+  
+      <div class="product-card" data-id="ap-nex-4" data-name="Nexgard Spectra 15 a 30kg" data-price="680">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard spectra 15 a 30k.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard Spectra 15 a 30kg (1 Tableta)</h3>
+          <div class="price">$ 680</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+  
+      <div class="product-card" data-id="ap-nex-5" data-name="Nexgard Spectra 3 a 7.5kg" data-price="560">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard spectra 3 a 7.5k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard Spectra 3 a 7.5kg (1 Tableta)</h3>
+          <div class="price">$ 560</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-nex-6" data-name="Nexgard Spectra 30 a 60kg" data-price="730">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard spectra 30 a 60k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard Spectra 30 a 60kg (1 Tableta)</h3>
+          <div class="price">$ 730</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-nex-7" data-name="Nexgard Spectra 7.6 a 15kg" data-price="630">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/nexgard spectra 7.6 a 15k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard Spectra 7.6 a 15kg (1 Tableta)</h3>
+          <div class="price">$ 630</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-nex-2" data-name="Nexgard 2 a 4kg" data-price="350">
+        <div class="product-badge">EFECTO RÁPIDO</div> 
+        <img src="imagenes/nexgard 2 a 4k.avif" class="product-img">
+        <div class="product-info">
+          <h3>Nexgard 2 a 4kg (1 Tableta)</h3>
+          <div class="price">$ 350</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-1" data-name="Simparica 3 Comprimidos 10 a 20kg" data-price="1090">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica 3 comprim 10 a 20k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Simparica 3 Comprimidos 10 a 20kg (1 Tableta)</h3>
+          <div class="price">$ 1090</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-2" data-name="Simparica 3 Comprimidos 2.5 a 5kg" data-price="790">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica 3 comprim 2.5 a 5k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Simparica 3 Comprimidos 2.5 a 5kg (1 Tableta)</h3>
+          <div class="price">$ 790</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-3" data-name="Simparica 3 Comprimidos 20 a 40kg" data-price="1550">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica 3 comprim 20 a 40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Simparica 3 Comprimidos 20 a 40kg (1 Tableta)</h3>
+          <div class="price">$ 1550</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-4" data-name="Simparica 3 Comprimidos 40 a 60kg" data-price="1650">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica 3 comprim 40 a 60k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Simparica 3 Comprimidos 40 a 60kg (1 Tableta)</h3>
+          <div class="price">$ 1650</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-5" data-name="Simparica 3 Comprimidos 5 a 10kg" data-price="890">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica 3 comprim 5 a 10k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Simparica 3 Comprimidos 5 a 10kg (1 Tableta)</h3>
+          <div class="price">$ 890</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-7" data-name="Simparica Trio 3 Comprimidos 2.5 a 5kg" data-price="990">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica trio 3 comprim 2.5 a 5k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Simparica Trio 3 Comprimidos 2.5 a 5kg (1 Tableta)</h3>
+          <div class="price">$ 990</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-8" data-name="Simparica Trio 3 Comprimidos 20 a 40kg" data-price="1750">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica trio 3 comprim 20 a 40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Simparica Trio 3 Comprimidos 20 a 40kg (1 Tableta)</h3>
+          <div class="price">$ 850</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-sim-9" data-name="Simparica Trio 3 Comprimidos 40 a 60kg" data-price="1890">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica trio 3 comprim 40 a 60k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Simparica Trio 3 Comprimidos 40 a 60kg (1 Tableta)</h3>
+          <div class="price">$ 1890</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="ap-nex-7" data-name="Simparica Trio 3 Comprimidos 5 a 10kg" data-price="1190">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/simparica trio 3 comprim 5 a 10k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Simparica Trio 3 Comprimidos 5 a 10kg (1 Tableta)</h3>
+          <div class="price">$ 1190</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+         <div class="product-card" data-id="ap-sim-5" data-name="Supraline Gatos" data-price="350">
+        <div class="product-badge">EFECTO RÁPIDO</div>
+        <img src="imagenes/supraline gatos.webp" class="product-img">
+        <div class="product-info">
+          <h3>Supraline Gatos</h3>
+          <div class="price">$ 350</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+         </div>
+
+    <h2 class="sector-title" id="pipetas">Pipetas y Tópicos</h2>
+    <div class="products-grid">
+      <div class="product-card" data-id="ap-pip-1" data-name="Pipeta dominal gato 4k" data-price="280">
+        <img src="imagenes/pipeta dominal gato -4k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta dominal gato 4k</h3>
+          <div class="price">$ 280</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-2" data-name="Pipeta Appryl Perros" data-price="690">
+        <img src="imagenes/pipeta dominal perro +40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 690</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-3" data-name="Pipeta Appryl Gatos" data-price="440">
+        <img src="imagenes/pipeta dominal perro 10 a 25k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 440</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-4" data-name="Pipeta Appryl Perros" data-price="550">
+        <img src="imagenes/pipeta dominal perro 25 a 40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 550</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-5" data-name="Pipeta Appryl Perros" data-price="390">
+        <img src="imagenes/pipeta dominal perro 5 a 10k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 390</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-6" data-name="Pipeta Appryl Perros" data-price="380">
+        <img src="imagenes/pipeta dominal perros -5k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 380</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-1" data-name="Pipeta Appryl Perros" data-price="280">
+        <img src="imagenes/pipeta frontline gatos.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 280</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-1" data-name="Pipeta Appryl Perros" data-price="280">
+        <img src="imagenes/pipeta frontline perros -10k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 280</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-1" data-name="Pipeta Appryl Perros" data-price="290">
+        <img src="imagenes/pipeta frontline perros 10 a 20k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 290</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="ap-pip-1" data-name="Pipeta Appryl Perros" data-price="360">
+        <img src="imagenes/pipeta frontline perros 20 a 40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 360</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+    <div class="product-card" data-id="ap-pip-7" data-name="Pipeta Appryl Perros" data-price="450">
+        <img src="imagenes/pipeta frontline perros 40 a 60k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 450</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+    </div>
+      <main>
+
+    <h2 class="sector-title" id="Collares"> Collares </h2>
+    <div class="products-grid">
+     <div class="product-card" data-id="ap-pip-7" data-name="Pipeta Appryl Perros" data-price="450">
+        <img src="imagenes/collar dominal gato.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Pipeta Appryl Desparasitante</h3>
+          <div class="price">$ 450</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+     <div class="product-card" data-id="ap-pip-7" data-name="Collar Dominal Perro -10kg" data-price="490">
+        <img src="imagenes/collar dominal perro -10k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Collar Dominal Perro</h3>
+          <div class="price">$ 490</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+     <div class="product-card" data-id="ap-pip-7" data-name="Collar Dominal Perro 10 a 25kg" data-price="520">
+        <img src="imagenes/collar dominal perro 10 a 25k.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Collar Dominal Perro 10 a 25kg</h3>
+          <div class="price">$ 520</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+
+      <div class="product-card" data-id="ap-pip-7" data-name="Collar Dominal Perro 25 a 40kg" data-price="590">
+        <img src="imagenes/collar dominal perro 25 a 40k.webp" class="product-img">
+        <div class="product-info">
+          <h3>Collar Dominal Perro 25 a 40kg</h3>
+          <div class="price">$ 590</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+
+     <div class="product-card" data-id="ap-pip-7" data-name="Collar Dominal Perro +40kg" data-price="690">
+        <img src="imagenes/collar dominal perro +40k.avif" class="product-img">
+        <div class="product-info">
+          <h3>Collar Dominal Perro +40kg</h3>
+          <div class="price">$ 690</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+
+      
+     <div class="product-card" data-id="ap-pip-7" data-name="Talcobal 100grs" data-price="280">
+        <img src="imagenes/talcobal 100grs.webp" class="product-img">
+        <div class="product-info">
+          <h3>Talcobal 100grs</h3>
+          <div class="price">$ 280</div>
+          <button class="add-btn" onclick="addToCart(this)">Agregar al Carrito</button>
+        </div>
+      </div>
+  </main>
+
+  <aside class="cart-modal" id="cart-modal">
+    <h3 style="margin-top:0">Tu Carrito</h3>
+    <div id="cart-items"></div>
+    <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; font-weight: bold;">
+      <span>Total:</span><span>$ <span id="cart-total">0</span></span>
+    </div>
+    <button onclick="checkout()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:15px; margin-top:20px; font-weight:bold; cursor:pointer;">Pedir por WhatsApp</button>
+  </aside>
+
+  <footer>
+    <p>© 2019 Dos Hermanos — Cuidado y Salud Animal</p>
+  </footer>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('dh_cart') || '[]');
+    function saveCart(){ localStorage.setItem('dh_cart', JSON.stringify(cart)); renderCart(); }
+    
+    function renderCart(){
+      const itemsEl = document.getElementById('cart-items');
+      const countEl = document.getElementById('cart-count');
+      const totalEl = document.getElementById('cart-total');
+      if(!itemsEl) return;
+      itemsEl.innerHTML='';
+      let total=0;
+      cart.forEach((it, idx)=>{
+        total += it.price * it.qty;
+        itemsEl.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <div style="font-size:13px;">${it.name} (x${it.qty})</div>
+          <div style="display:flex; gap:5px;">
+            <button onclick="changeQty(${idx}, -1)" style="border:none; padding:2px 8px;">-</button>
+            <button onclick="changeQty(${idx}, 1)" style="border:none; padding:2px 8px;">+</button>
+          </div>
+        </div>`;
+      });
+      countEl.innerText = cart.reduce((s,i)=>s+i.qty,0);
+      totalEl.innerText = total;
+    }
+
+    function addToCart(btn){
+      const card = btn.closest('.product-card');
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const price = Number(card.dataset.price);
+      const existing = cart.find(c=>c.id===id);
+      if(existing) existing.qty += 1; else cart.push({id, name, price, qty:1});
+      saveCart();
+      btn.innerHTML = '✅ Agregado'; 
+      setTimeout(()=>btn.innerHTML='Agregar al Carrito', 1000);
+    }
+
+    function changeQty(index, delta){
+      cart[index].qty += delta;
+      if(cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+    }
+
+    function checkout(){
+      if(cart.length === 0) return alert('El carrito está vacío');
+      let msg = "¡Hola Dos Hermanos! Quiero comprar estos antipulgas:\n\n";
+      cart.forEach(i => msg += `• ${i.name} (x${i.qty})\n`);
+      msg += `\n*Total: $${document.getElementById('cart-total').innerText}*`;
+      window.open(`https://wa.me/59897319488?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    document.getElementById('open-cart').onclick = () => {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    };
+    renderCart();
+  </script>
+</body>
+</html>

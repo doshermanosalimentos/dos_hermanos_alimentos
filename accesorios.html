@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dos Hermanos — Accesorios & Snacks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Paleta específica para Accesorios */
+      --accent: #4db6ac; 
+      --accent-dark: #00897b;
+      --bg-light: #f4fbfb;
+      --text: #2d2d2d;
+      --white: #ffffff;
+      --muted: #7d7d7d;
+    }
+
+    body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; }
+
+    /* NAVEGACIÓN */
+    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index:1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-mark { width:45px; height:45px; transition: 0.5s; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; }
+
+    /* CABECERA */
+    .category-header { 
+      padding: 120px 20px 60px; text-align: center; 
+      background: linear-gradient(to bottom, #ffffff, var(--bg-light));
+    }
+    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
+    .category-header p { max-width: 600px; margin: 15px auto; color: var(--muted); }
+
+    /* FILTROS */
+    .filters { 
+      max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;
+      display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-btn { 
+      padding: 8px 22px; border-radius: 20px; border: 1px solid #e0e0e0;
+      background: white; cursor: pointer; font-size: 14px; transition: 0.3s;
+    }
+    .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* GRID DE PRODUCTOS */
+    .products-grid { 
+      max-width: 1200px; margin: 0 auto 80px; 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 30px; padding: 0 20px; 
+    }
+
+    .product-card { 
+      background: white; border-radius: 28px; overflow: hidden;
+      display: flex; flex-direction: column; transition: 0.4s;
+      border: 1px solid #f0f0f0; position: relative;
+    }
+    .product-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(77, 182, 172, 0.15); }
+    
+    .product-badge {
+      position: absolute; top: 15px; left: 15px; background: var(--accent-dark);
+      color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; z-index: 2;
+    }
+
+    .product-img { width: 100%; height: 260px; object-fit: cover; transition: 0.5s; }
+    .product-card:hover .product-img { transform: scale(1.05); }
+    
+    .product-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+    .product-info h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); }
+    .product-info p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    
+    .product-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .price { font-size: 22px; font-weight: 700; color: var(--accent-dark); }
+
+    .add-btn { 
+      background: var(--accent); color: white; border: none; width: 50px; height: 50px;
+      border-radius: 18px; cursor: pointer; font-size: 24px; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .add-btn:hover { background: var(--accent-dark); transform: scale(1.1); }
+
+    /* CARRITO MODAL */
+    .cart-modal { 
+      position: fixed; top: 80px; right: 20px; width: 340px; 
+      background: white; border-radius: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+      padding: 30px; display: none; z-index: 1100; max-height: 80vh; overflow-y: auto;
+    }
+
+    footer { background: #1a1a1a; color: white; padding: 60px 20px; text-align: center; }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
+        <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="perros.html">Perros</a>
+        <a href="gatos.html">Gatos</a>
+        <a href="accesorios.html">Accesorios y Snacks</a>
+        <a href="antipulgas.html">Antipulgas</a>
+        <a href="contacto.html">Contacto</a>
+        <button id="open-cart" style="background:none; border:none; cursor:pointer; font-weight:bold; color:var(--accent-dark);">
+            🛒 (<span id="cart-count">0</span>)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="category-header">
+    <h1>Accesorios & Snacks</h1>
+    <p>Desde el descanso más profundo hasta el paseo más divertido. Calidad y estilo para el día a día de tus mejores amigos.</p>
+  </header>
+
+  <main class="products-grid">
+        <div class="product-card" data-id="a2" data-name="Hueso de lonja grande" data-price="190">
+      <img src="imagenes/hueso de lonja grande.webp" class="product-img" alt="hueso de lonja">
+      <div class="product-info">
+        <h3>Hueso de lonja grande</h3>
+        <div class="product-foot">
+          <div class="price">$ 190</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Huesos de lonja chicos" data-price="50">
+      <img src="imagenes/huesos de lonja chicos.jpg" class="product-img" alt="huesos de lonja chicos">
+      <div class="product-info">
+        <h3>Huesos de lonja chicos</h3>
+        <div class="product-foot">
+          <div class="price">$ 50</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Palitos de colores" data-price="380">
+      <img src="imagenes/palitos colores.jpg" class="product-img" alt="Palitos de colores 1kg">
+      <div class="product-info">
+        <h3>Palitos de colores</h3>
+        <div class="product-foot">
+          <div class="price">$ 380</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Palitos blancos" data-price="380">
+      <img src="imagenes/palitos blancos.jpg" class="product-img" alt="Palitos blancos">
+      <div class="product-info">
+        <h3>Palitos blancos</h3>
+        <div class="product-foot">
+          <div class="price">$ 380</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+      <div class="product-card" data-id="a2" data-name="Palitos de Panceta" data-price="380">
+      <img src="imagenes/palitos de panceta.jpg" class="product-img" alt="palitos de panceta 1kg">
+      <div class="product-info">
+        <h3>Palitos de Panceta</h3>
+        <p>Perfectos para acompañar los alimentos de tu mascota. Sabor delicioso y fácil de servir.</p>
+        <div class="product-foot">
+          <div class="price">$ 380</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Orejas de vaca" data-price="650">
+      <img src="imagenes/orejas de vaca.webp" class="product-img" alt="Orejas de vaca 1kg">
+      <div class="product-info">
+        <h3>Orejas de vaca</h3>
+        <div class="product-foot">
+          <div class="price">$ 650</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Pate Mikcat lata" data-price="120">
+      <img src="imagenes/patemikcat lata.webp" class="product-img" alt="pate mikcat lata">
+      <div class="product-info">
+        <h3>Pate Mikcat lata</h3>
+        <p>Alimento completo para gatos adultos. Rico en proteínas y vitaminas esenciales.</p>
+        <div class="product-foot">
+          <div class="price">$ 120</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Pate Mikdog lata" data-price="120">
+      <img src="imagenes/patemikdog lata.jpg" class="product-img" alt="pate mikdog lata">
+      <div class="product-info">
+        <h3>Pate Mikdog lata</h3>
+        <p>Alimento completo para perros adultos. Rico en proteínas y vitaminas esenciales.</p>
+        <div class="product-foot">
+          <div class="price">$ 120</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Salsas Mikcat" data-price="45">
+      <img src="imagenes/salsas mikcat.jpeg" class="product-img" alt="Salsas Mikcat">
+      <div class="product-info">
+        <h3>Salsas Mikcat</h3>
+        <p>Perfectas para acompañar los alimentos de tu mascota. Sabor delicioso y fácil de servir.</p>
+        <div class="product-foot">
+          <div class="price">$ 45</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Salsa Mikdog" data-price="45">
+      <img src="imagenes/salsas mikdog.jpg" class="product-img" alt="salsas mikdog">
+      <div class="product-info">
+        <h3>Salsa Mikdog</h3>
+        <div class="product-foot">
+          <div class="price">$ 45</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Galletas Magnus" data-price="290">
+      <img src="imagenes/galletas magnus.jpg" class="product-img" alt="galletas magnus">
+      <div class="product-info">
+        <h3>Galletas Magnus</h3>
+        <p>Perfectas para acompañar los alimentos de tu mascota. Sabor delicioso y fácil de servir.</p>
+        <div class="product-foot">
+          <div class="price">$ 290</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Salsa Whiskas Caja" data-price="650">
+      <img src="imagenes/salsas whiskas caja.jpg" class="product-img" alt="salsa wiskas caja">
+      <div class="product-info">
+        <h3>Salsa Whiskas Caja</h3>
+        <p>Perfectas para acompañar los alimentos de tu mascota. Sabor delicioso y fácil de servir.</p>
+        <div class="product-foot">
+          <div class="price">$ 650</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Galletas Biscroks" data-price="150">
+      <img src="imagenes/galletas biscroks.jpg" class="product-img" alt="galletas biscroks">
+      <div class="product-info">
+        <h3>Galletas Biscroks</h3>
+        <p>Perfectas para acompañar los alimentos de tu mascota. Sabor delicioso y fácil de servir.</p>
+        <div class="product-foot">
+          <div class="price">$ 150</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Rascador para Gatos Mediano" data-price="350">
+      <img src="imagenes/rascadorparagatos.webp" class="product-img" alt="rascador para gatos mediano">
+      <div class="product-info">
+        <h3>Rascador para Gatos Mediano</h3>
+        <p>Perfecto para que tu gato se ejercite y mantenga sus uñas saludables.</p>
+        <div class="product-foot">
+          <div class="price">$ 350</div> 
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+      <div class="product-card" data-id="a2" data-name="Rascador para Gatos Grande" data-price="450">
+      <img src="imagenes/rascadorparagatos.webp" class="product-img" alt="rascador para gatos grande">
+      <div class="product-info">
+        <h3>Rascador para Gatos Grande</h3>
+        <p>Perfecto para que tu gato se ejercite y mantenga sus uñas saludables.</p>
+        <div class="product-foot">
+          <div class="price">$ 450</div> 
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Toallas Higiénicas 40 Uni" data-price="850">
+      <img src="imagenes/toallas higienicas.webp" class="product-img" alt="toallas higienicas 40uni">
+      <div class="product-info">
+        <h3>Toallas Higiénicas 40 uni</h3>
+        <p>Perfectas para mantener a tu mascota limpia y cómoda.</p>
+        <div class="product-foot">
+          <div class="price">$ 850</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Toallas Higiénicas 20 Uni" data-price="650">
+      <img src="imagenes/toallas higienicas.webp" class="product-img" alt="toallas higienicas 20uni">
+      <div class="product-info">
+        <h3>Toallas Higiénicas 20 uni</h3>
+        <p>Perfectas para mantener a tu mascota limpia y cómoda.</p>
+        <div class="product-foot">
+          <div class="price">$ 650</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="Baño para Gato con Pala" data-price="590">
+      <img src="imagenes/baño para gato con pala.jpg" class="product-img" alt="baño para gato con pala">
+      <div class="product-info">
+        <h3>Baño para Gato con Pala</h3>
+        <p>Perfecto para mantener a tu mascota limpia y cómoda.</p>
+        <div class="product-foot">
+          <div class="price">$ 590</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+        <div class="product-card" data-id="a2" data-name="aprryl desparacitante" data-price="300">
+      <img src="imagenes/appryl desparacitante.jpg" class="product-img" alt="aprryl desparacitante">
+      <div class="product-info">
+        <h3>Aprryl Desparacitante</h3>
+        <p>Desparacitante blister x10 unidades</p>
+        <div class="product-foot">
+          <div class="price">$ 300</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+            <div class="product-card" data-id="a2" data-name="Shampoo Popline" data-price="280">
+      <img src="imagenes/shampoo popline.jpg" class="product-img" alt="shampoo popline 500ml">
+      <div class="product-info">
+        <h3>Shampoo Popline</h3>
+        <p>Para mantener a tu mascota limpia y con un pelaje saludable.</p>
+        <div class="product-foot">
+          <div class="price">$ 280</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <aside class="cart-modal" id="cart-modal">
+    <h3 style="margin-top:0; color:var(--accent-dark);">Mi Carrito</h3>
+    <div id="cart-items"></div>
+    <div style="border-top: 2px solid var(--bg-light); padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+      <span>Total:</span>
+      <span>$ <span id="cart-total">0</span></span>
+    </div>
+    <button onclick="checkout()" style="width:100%; background:#25D366; color:white; border:none; padding:16px; border-radius:18px; margin-top:20px; font-weight:bold; cursor:pointer;">
+        Finalizar por WhatsApp
+    </button>
+  </aside>
+
+  <footer>
+    <p>© 2026 Dos Hermanos — Estilo y calidad para tu mascota.</p>
+  </footer>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('dh_cart') || '[]');
+
+    function saveCart(){
+      localStorage.setItem('dh_cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart(){
+      const itemsEl = document.getElementById('cart-items');
+      const countEl = document.getElementById('cart-count');
+      const totalEl = document.getElementById('cart-total');
+      if(!itemsEl) return;
+      itemsEl.innerHTML='';
+      let total=0;
+      cart.forEach((it, idx)=>{
+        total += it.price * it.qty;
+        itemsEl.innerHTML += `
+          <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+            <div style="font-size:13px;"><strong>${it.name}</strong><br><small>$${it.price} x ${it.qty}</small></div>
+            <div style="display:flex; gap:5px;">
+              <button onclick="changeQty(${idx}, -1)" style="border:none; width:25px; height:25px; border-radius:5px; cursor:pointer;">-</button>
+              <button onclick="changeQty(${idx}, 1)" style="border:none; width:25px; height:25px; border-radius:5px; cursor:pointer;">+</button>
+            </div>
+          </div>`;
+      });
+      countEl.innerText = cart.reduce((s,i)=>s+i.qty,0);
+      totalEl.innerText = total;
+    }
+
+    function addToCart(btn){
+      const card = btn.closest('.product-card');
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const price = Number(card.dataset.price);
+      const existing = cart.find(c=>c.id===id);
+      if(existing) existing.qty += 1;
+      else cart.push({id, name, price, qty:1});
+      saveCart();
+      btn.innerHTML = '✔'; 
+      setTimeout(()=>{ btn.innerHTML='+'; }, 800);
+    }
+
+    function changeQty(index, delta){
+      cart[index].qty += delta;
+      if(cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+    }
+
+    function checkout(){
+      if(cart.length === 0) return alert('El carrito está vacío');
+      let msg = "¡Hola! Me interesan estos accesorios:\n\n";
+      cart.forEach(i => msg += `✨ ${i.name} (x${i.qty})\n`);
+      msg += `\n*Total: $${document.getElementById('cart-total').innerText}*`;
+      window.open(`https://wa.me/59897319488?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    document.getElementById('open-cart').onclick = () => {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    };
+
+    renderCart();
+  </script>
+</body>
+</html>

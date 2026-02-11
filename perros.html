@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dos Hermanos — Alimentos para Perros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #a67c52;
+      --accent-dark: #7a5c45;
+      --bg-light: #fdfaf5;
+      --text: #2d2d2d;
+      --white: #ffffff;
+      --muted: #7d7d7d;
+    }
+
+    /* Suaviza el movimiento cuando haces clic en los botones */
+    html { scroll-behavior: smooth; }
+
+    body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; }
+
+    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index:1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+    .logo-mark { width:45px; height:45px; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; }
+
+    .category-header { padding: 120px 20px 60px; text-align: center; background: linear-gradient(to bottom, #fff, var(--bg-light)); }
+    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
+    .category-header p { max-width: 600px; margin: 15px auto; color: var(--muted); }
+
+    /* BOTONES DE FILTRO (Funcionando como enlaces) */
+    .filters { 
+      max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;
+      display: flex; gap: 10px; overflow-x: auto; white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-link { 
+      padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd;
+      background: white; cursor: pointer; font-size: 14px; transition: 0.3s;
+      text-decoration: none; color: var(--text); display: inline-block;
+    }
+    .filter-link:hover, .filter-link.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* TITULOS DE SECTORES */
+    .sector-title {
+      max-width: 1200px; margin: 40px auto 20px; padding: 0 20px;
+      color: var(--accent-dark); font-size: 24px; scroll-margin-top: 100px; /* Para que el título no quede tapado por el menú */
+    }
+
+    .products-grid { 
+      max-width: 1200px; margin: 0 auto 40px; 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 30px; padding: 0 20px; 
+    }
+
+    .product-card { background: white; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #f0f0f0; position: relative; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .product-badge { position: absolute; top: 15px; left: 15px; background: var(--accent); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; z-index: 2; }
+    .product-img { width: 100%; height: 280px; object-fit: contain; padding: 20px; box-sizing: border-box; background: #fff; }
+    .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+    .product-info h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); }
+    .product-info p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; }
+    .product-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .price { font-size: 20px; font-weight: 700; color: var(--accent-dark); }
+    .add-btn { background: var(--accent); color: white; border: none; width: 45px; height: 45px; border-radius: 15px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+
+    .cart-modal { position: fixed; top: 80px; right: 20px; width: 320px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); padding: 25px; display: none; z-index: 1100; max-height: 80vh; overflow-y: auto; }
+    .wpp-btn { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 25px rgba(37,211,102,0.4); }
+
+    footer { background: #1a1a1a; color: white; padding: 60px 20px; text-align: center; margin-top: 40px; }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
+        <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="gatos.html">Gatos</a>
+        <a href="accesorios.html">Accesorios y Snacks</a>
+        <a href="antipulgas.html">Antipulgas</a>
+        <a href="contacto.html">Contacto</a>
+        <button id="open-cart" style="background:none; border:none; cursor:pointer; font-weight:bold; color:var(--accent);">
+            🛒 (<span id="cart-count">0</span>)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="category-header">
+    <h1>Mundo Perro</h1>
+    <p>La mejor nutrición para cada etapa de su vida.</p>
+  </header>
+
+  <div class="filters">
+    <a href="#cachorros" class="filter-link">Cachorros</a>
+    <a href="#adultos" class="filter-link">Adultos</a>
+    <a href="#medicados" class="filter-link">Medicados</a>
+  </div>
+
+<main>
+    <h2 class="sector-title" id="cachorros">Cachorros</h2>
+    <div class="products-grid">
+      
+      <div class="product-card" data-id="p2" data-name="criolla cachorro 7kg" data-price="890">
+        <img src="imagenes/criollacahorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Criolla Cachorro 7kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 890</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="p3" data-name="connie cachorro 8kg" data-price="1090">
+        <img src="imagenes/conniecachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Connie Cachorro 8kg</h3>
+          <p>Crecimiento saludable y pelaje brillante para tu cachorro.</p>
+          <div class="product-foot">
+            <div class="price">$ 1090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="connie cachorro 22kg" data-price="2090">
+        <img src="imagenes/conniecachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Connie Cachorro 22kg</h3>
+          <p>Crecimiento saludable y pelaje brillante para tu cachorro.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Lager Cachorro 10kg" data-price="1390">
+        <img src="imagenes/lagercachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Lager Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Lager Cachorro 22kg" data-price="2450">
+        <img src="imagenes/lagercachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Lager Cachorro 22kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.450</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Maxine Cachorro 7.5kg" data-price="1390">
+        <img src="imagenes/maxinecachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Maxine Cachorro 7.5kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Maxine Cachorro 21kg" data-price="2990">
+        <img src="imagenes/maxinecachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Maxine Cachorro 21kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="vitamax Natural Cachorro 10kg" data-price="1490">
+        <img src="imagenes/vittamaxcachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Vitamax Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="vitamax Cachorro 15kg" data-price="1690">
+        <img src="imagenes/vittamaxcachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Vitamax Cachorro 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.690</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Primocao Cachorro 10kg" data-price="1590">
+        <img src="imagenes/primocaocachorro.png" class="product-img">
+        <div class="product-info">
+          <h3>Primocao Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Primocao Cachorro 20kg" data-price="2890">
+        <img src="imagenes/primocaocachorro.png" class="product-img">
+        <div class="product-info">
+          <h3>Primocao Cachorro 20kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.890</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Natural Dog Cachorro 14kg" data-price="1690">
+        <img src="imagenes/naturaldogcachorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Natural Dog Cachorro 14kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.690</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="M-line cachorro 10kg" data-price="1690">
+        <img src="imagenes/mlinecachorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>M-line Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1690</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Max Cachorro 10kg" data-price="1850">
+        <img src="imagenes/maxcachorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Max Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.850</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Max Cachorro 22kg" data-price="3090">
+        <img src="imagenes/maxcachorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Max Cachorro 22kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Equilibrio Razas Pequeñas Cachorro 7.5kg" data-price="2090">
+        <img src="imagenes/equilibriorazaspequeñascachorros.webp" class="product-img">
+        <div class="product-info">
+          <h3>Equilibrio Razas Pequeñas Cachorro 7.5kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Ner Cachorro 20kg" data-price="2190">
+        <img src="imagenes/nerocachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Ner Cachorro 20kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.190</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Astro Cachorro 14kg" data-price="2290">
+        <img src="imagenes/astrocachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Astro Cachorro 14kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.290</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="The Golden Choice 14kg" data-price="2390">
+        <img src="imagenes/thegoldencachorro.jpg" class="product-img">
+        <div class="product-info">
+          <h3>The Golden Choice 14kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Dogui cachorro 21kg" data-price="2590">
+        <img src="imagenes/doguicachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Dogui cachorro 21kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Three Dog super Premium Cachorro 15kg" data-price="2090">
+        <img src="imagenes/threedogcachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Three Dog super Premium Cachorro 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Canfeed Cachorro 15kg" data-price="3190">
+        <img src="imagenes/canfeed.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Canfeed Cachorro 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.190</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Equilibrio all breeds 15+3kg" data-price="3250">
+        <img src="imagenes/equilibrioallcachorros.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Equilibrio all breeds 15+3kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.250</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Dog Chow Cachorro 21kg" data-price="2090">
+        <img src="imagenes/dogchowcachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Dog Chow Cachorro 21kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Frost LB Cachorro 10kg" data-price="2650">
+        <img src="imagenes/frostcachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Frost LB Cachorro 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.650</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Frost SB Cachorro 15kg" data-price="3350">
+        <img src="imagenes/frostcachorrosb.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Frost SB Cachorro 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.350</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="proplan cachorro pequeño 7.5" data-price="2550">
+        <img src="imagenes/proplancachorro.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Proplan Cachorro pequeño 7.5kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.550</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+            <div class="product-card" data-id="p2" data-name="Proplan Cachorro Mediano 15kg" data-price="3950">
+        <img src="imagenes/proplancachorromediano.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Proplan Cachorro Mediano 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.950</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="p2" data-name="Proplan Cachorro Grande 15kg" data-price="3950">
+        <img src="imagenes/proplangrandecachorro.webp" class="product-img">
+        <div class="product-info">
+          <h3>Proplan Cachorro Grande 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.950</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="p2" data-name="Bio Fresh Cachorro Chico 10kg" data-price="3590">
+        <img src="imagenes/biofreshcachorrochico.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Bio Fresh Cachorro Chico 10kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="p2" data-name="Bio Fresh Cachorro Mediano 15kg" data-price="4490">
+        <img src="imagenes/cachorrobiofresh.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Bio Fresh Cachorro Mediano 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 4.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+          <div class="product-card" data-id="p2" data-name="Proplan Cachorro Grande 15kg" data-price="3950">
+        <img src="imagenes/cachorromedianobiofresh.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Proplan Cachorro Grande 15kg</h3>
+          <p>Nutrición natural con alto contenido de carne fresca y granos integrales.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.950</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div> <h2 class="sector-title" id="adultos">Adultos</h2>
+    <div class="products-grid">
+      
+      <div class="product-card" data-id="p1" data-name="Lager adulto 10kg" data-price="1390">
+        <div class="product-badge">EL MÁS VENDIDO</div>
+        <img src="imagenes/lageradulto.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Lager Adulto 10kg</h3>
+          <p>Alimento High Premium de 10kg. Sin colorantes ni aromas artificiales.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-id="p4" data-name="Lager Adulto 22kg" data-price="2490">
+        <img src="imagenes/lageradulto.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Lager Adulto 22kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Maxine Adulto 7.5kg" data-price="1390">
+        <img src="imagenes/maxineadulto.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Maxine Adulto 7.5kg </h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Maxine Adulto 21kg" data-price="2890">
+        <img src="imagenes/maxineadulto.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Maxine Adulto 21kg </h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.890</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Vittamax Adulto 22kg" data-price="1390">
+        <img src="imagenes/vittamaxadultos.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Vittamax Adulto 22kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Dog Chow Adulto 8kg" data-price="1450">
+        <img src="imagenes/dogchowadulto.webp" class="product-img">
+        <div class="product-info">
+          <h3>Dog Chow Adulto 8kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.450</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Dog Chow Adulto 21kg" data-price="3090">
+        <img src="imagenes/dogchowadulto.webp" class="product-img">
+        <div class="product-info">
+          <h3>Dog Chow Adulto 21kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="primocao 10kg" data-price="1590">
+        <img src="imagenes/primocao razas pequeñas 10 y 20.png" class="product-img">
+        <div class="product-info">
+          <h3>Primocao 10kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Primocao 20kg" data-price="2490">
+        <img src="imagenes/primocao razas pequeñas 10 y 20.png" class="product-img">
+        <div class="product-info">
+          <h3>Primocao 20kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="M-line 10kg" data-price="1590">
+        <img src="imagenes/m line razas pequeñas 10.webp" class="product-img">
+        <div class="product-info">
+          <h3>M-line 10kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="pedigree 8kg" data-price="1650">
+        <img src="imagenes/pedigree razas pequeñas 8 y 21.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pedigree 8kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.650</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Pedigree 21kg" data-price="2790">
+        <img src="imagenes/pedigree razas pequeñas 8 y 21.webp" class="product-img">
+        <div class="product-info">
+          <h3>Pedigree 21kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.790</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Max 10kg" data-price="1850">
+        <img src="imagenes/maxbuffet.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Max 10kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.850</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="equilibrio 7.5" data-price="1990">
+        <img src="imagenes/equilibrioadulto.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Equilibrio 7.5kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+       <div class="product-card" data-id="p4" data-name="Canfeed 7.5kg" data-price="1990">
+        <img src="imagenes/canfeed.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Canfeed 7.5kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="Proplan 7.5kg" data-price="2390">
+        <img src="imagenes/proplan.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Proplan 7.5kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="Frost Adulto 10kg" data-price="2490">
+        <img src="imagenes/frostadulto.webp" class="product-img">
+        <div class="product-info">
+          <h3>Frost Adulto 10kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="frost 15kg" data-price="3290">
+        <img src="imagenes/frostadulto.webp" class="product-img">
+        <div class="product-info">
+          <h3>Frost 15kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.290</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="three dogs 15kg" data-price="3190">
+        <img src="imagenes/three dogs razas pequeñas 15.webp" class="product-img">
+        <div class="product-info">
+          <h3>Three Dogs 15kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.190</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="Bio Fresh Adulto 10kg" data-price="3490">
+        <img src="imagenes/biofreshadulto.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Bio Fresh Adulto 10kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+         <div class="product-card" data-id="p4" data-name="Bio Fresh 15kg" data-price="4490">
+        <img src="imagenes/biofreshadulto.jpeg" class="product-img">
+        <div class="product-info">
+          <h3>Bio Fresh 15kg</h3>
+          <p>Proteína de alta calidad para perros adultos con actividad normal.</p>
+          <div class="product-foot">
+            <div class="price">$ 4.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div> <h2 class="sector-title" id="medicados">Medicados</h2>
+    <div class="products-grid">
+       <p style="padding: 20px; color: #999;">Próximamente productos medicados...</p>
+    </div>
+  </main>
+
+  <aside class="cart-modal" id="cart-modal">
+    <h3 style="margin-top:0">Tu Pedido</h3>
+    <div id="cart-items"></div>
+    <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+      <span>Total:</span><span>$ <span id="cart-total">0</span></span>
+    </div>
+    <button onclick="checkout()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:15px; margin-top:20px; font-weight:bold; cursor:pointer;">Confirmar por WhatsApp</button>
+  </aside>
+
+  <a href="https://wa.me/59897319488" class="wpp-btn" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WPP" style="width:35px;">
+  </a>
+
+  <script>
+    // Tu lógica de JS que ya tenías sigue funcionando igual
+    let cart = JSON.parse(localStorage.getItem('dh_cart') || '[]');
+    function saveCart(){ localStorage.setItem('dh_cart', JSON.stringify(cart)); renderCart(); }
+    function renderCart(){
+      const itemsEl = document.getElementById('cart-items');
+      const countEl = document.getElementById('cart-count');
+      const totalEl = document.getElementById('cart-total');
+      if(!itemsEl) return;
+      itemsEl.innerHTML='';
+      let total=0;
+      cart.forEach((it, idx)=>{
+        total += it.price * it.qty;
+        itemsEl.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+          <div style="font-size:14px;"><strong>${it.name}</strong><br><small>$${it.price} x ${it.qty}</small></div>
+          <div style="display:flex; gap:5px;">
+            <button onclick="changeQty(${idx}, -1)" style="border:none; padding:5px 10px; border-radius:5px;">-</button>
+            <button onclick="changeQty(${idx}, 1)" style="border:none; padding:5px 10px; border-radius:5px;">+</button>
+          </div>
+        </div>`;
+      });
+      countEl.innerText = cart.reduce((s,i)=>s+i.qty,0);
+      totalEl.innerText = total;
+    }
+    function addToCart(btn){
+      const card = btn.closest('.product-card');
+      const id = card.dataset.id;
+      const name = card.dataset.name;
+      const price = Number(card.dataset.price);
+      const existing = cart.find(c=>c.id===id);
+      if(existing) existing.qty += 1; else cart.push({id, name, price, qty:1});
+      saveCart();
+      btn.innerHTML = '✔'; setTimeout(()=>btn.innerHTML='+', 800);
+    }
+    function changeQty(index, delta){
+      cart[index].qty += delta;
+      if(cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+    }
+    function checkout(){
+      if(cart.length === 0) return alert('El carrito está vacío');
+      let msg = "¡Hola! Quiero hacer un pedido de Perros:\n\n";
+      cart.forEach(i => msg += `• ${i.name} (x${i.qty})\n`);
+      msg += `\n*Total: $${document.getElementById('cart-total').innerText}*`;
+      window.open(`https://wa.me/59897319488?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    document.getElementById('open-cart').onclick = () => {
+      const modal = document.getElementById('cart-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    };
+    renderCart();
+  </script>
+</body>
+</html>
