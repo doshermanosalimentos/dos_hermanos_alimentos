@@ -5,38 +5,55 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 document.addEventListener("DOMContentLoaded", () => {
-    initApp();
     setupMobileMenu();
     updateCartUI();
+    initEventListeners();
 });
 
-function initApp() {
-    // Escuchar clics en botones "Agregar"
+function initEventListeners() {
     document.addEventListener("click", (e) => {
+        // 1. Agregar al carrito
         if (e.target.classList.contains("add-btn")) {
             const card = e.target.closest(".product-card");
             const name = card.dataset.name || card.querySelector("h3").textContent;
-            const priceText = card.dataset.price || card.querySelector(".price").textContent.replace("$", "").replace(".", "").trim();
+            // Limpia el precio de símbolos y puntos para que sea un número puro
+            const priceText = card.dataset.price || card.querySelector(".price").textContent.replace(/[^0-9]/g, "");
             const price = parseFloat(priceText);
 
             addToCart(name, price);
             
-            // Efecto visual en el botón
+            // Efecto visual rápido
             const originalText = e.target.textContent;
             e.target.textContent = "✓";
-            setTimeout(() => e.target.textContent = originalText, 800);
+            e.target.style.background = "#25D366";
+            setTimeout(() => {
+                e.target.textContent = originalText;
+                e.target.style.background = "";
+            }, 800);
         }
 
-        // Abrir carrito
+        // 2. Abrir carrito (Sidebar)
         if (e.target.id === "open-cart" || e.target.closest("#open-cart")) {
             document.querySelector(".cart-sidebar").classList.add("active");
             document.querySelector(".cart-overlay").classList.add("active");
         }
 
-        // Cerrar carrito
-        if (e.target.id === "closeCart" || e.target.classList.contains("cart-overlay")) {
+        // 3. Cerrar carrito
+        if (e.target.id === "closeCart" || e.target.classList.contains("cart-overlay") || e.target.closest("#closeCart")) {
             document.querySelector(".cart-sidebar").classList.remove("active");
             document.querySelector(".cart-overlay").classList.remove("active");
+        }
+
+        // 4. Finalizar pedido WhatsApp
+        if (e.target.id === "checkoutBtn") {
+            if (cart.length === 0) return alert("El carrito está vacío 🐾");
+            
+            let msg = "¡Hola Dos Hermanos! Quisiera este pedido:%0A%0A";
+            cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
+            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            msg += `%0A*Total: $${total.toLocaleString()}*`;
+            
+            window.open(`https://wa.me/59897319488?text=${msg}`, '_blank');
         }
     });
 }
@@ -56,25 +73,45 @@ function updateCartUI() {
     const cartCount = document.getElementById("cart-count");
     const cartTotal = document.getElementById("cartTotal");
 
+    // Actualiza burbuja de cantidad
     if (cartCount) cartCount.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
+    
+    // Actualiza total de la sidebar
     if (cartTotal) {
         const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
         cartTotal.textContent = total.toLocaleString();
     }
 
+    // Genera el HTML de los items
     if (cartBody) {
-        cartBody.innerHTML = cart.map((item, index) => `
-            <div class="cart-item">
-                <div>
-                    <strong>${item.name}</strong><br>
-                    <small>${item.qty} x $${item.price.toLocaleString()}</small>
+        if (cart.length === 0) {
+            cartBody.innerHTML = `<p style="text-align:center; color:#999; margin-top:20px;">Tu carrito está vacío</p>`;
+        } else {
+            cartBody.innerHTML = cart.map((item, index) => `
+                <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                    <div style="flex-grow:1;">
+                        <div style="font-weight:600; font-size:14px;">${item.name}</div>
+                        <div style="font-size:12px; color:#777;">${item.qty} x $${item.price.toLocaleString()}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button onclick="changeQty(${index}, -1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px; cursor:pointer;">-</button>
+                        <span>${item.qty}</span>
+                        <button onclick="changeQty(${index}, 1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px; cursor:pointer;">+</button>
+                        <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#e57373; cursor:pointer; margin-left:5px;">✕</button>
+                    </div>
                 </div>
-                <button onclick="removeFromCart(${index})" class="btn-delete">✕</button>
-            </div>
-        `).join('');
+            `).join('');
+        }
     }
     localStorage.setItem("cart", JSON.stringify(cart));
 }
+
+// Funciones globales para botones del carrito
+window.changeQty = (index, delta) => {
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
+    updateCartUI();
+};
 
 window.removeFromCart = (index) => {
     cart.splice(index, 1);
@@ -82,41 +119,16 @@ window.removeFromCart = (index) => {
 };
 
 // ==========================================
-// 📱 LÓGICA MENÚ MÓVIL (LAS 3 RAYITAS)
+// 📱 LÓGICA MENÚ MÓVIL
 // ==========================================
 function setupMobileMenu() {
-    const navInner = document.querySelector('.nav-inner');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
     
-    if (navInner && navLinks && !document.querySelector('.mobile-menu-btn')) {
-        const menuBtn = document.createElement('button');
-        menuBtn.classList.add('mobile-menu-btn');
-        menuBtn.innerHTML = '☰'; // Icono 3 rayas
-        navInner.prepend(menuBtn); // Lo pone al principio
-
+    if (menuBtn && navLinks) {
         menuBtn.onclick = () => {
             navLinks.classList.toggle('active');
             menuBtn.innerHTML = navLinks.classList.contains('active') ? '✕' : '☰';
         };
     }
 }
-
-// Finalizar pedido WhatsApp
-document.addEventListener("click", (e) => {
-    if (e.target.id === "checkoutBtn") {
-        if (cart.length === 0) return alert("El carrito está vacío 🐾");
-        let msg = "¡Hola Dos Hermanos! Quisiera este pedido:%0A";
-        cart.forEach(i => msg += `• ${i.name} (x${i.qty})%0A`);
-        const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-        msg += `%0A*Total: $${total}*`;
-        window.open(`https://wa.me/59897319488?text=${msg}`, '_blank');
-    }
-});
-const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.querySelector('.nav-links');
-
-menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    // Cambia el icono de ☰ a ✕ al abrir
-    menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-});

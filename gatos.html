@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Paleta específica para Gatos */
       --accent: #8e7cc3; 
       --accent-dark: #674ea7;
       --bg-light: #f9f7ff;
@@ -16,87 +15,55 @@
       --muted: #7d7d7d;
     }
 
+    html { scroll-behavior: smooth; }
     body { font-family: "Poppins", sans-serif; background-color: var(--bg-light); color: var(--text); margin:0; overflow-x: hidden; }
 
-    /* NAVEGACIÓN */
-    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index:1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-    .nav-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
-    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
-    .logo-mark { width:45px; height:45px; transition: 0.5s; }
-    .nav-links { display:flex; gap:20px; }
-    .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; }
+    /* NAVEGACIÓN PROFESIONAL */
+    nav { position: fixed; top:0; width:100%; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); z-index:2000; border-bottom: 1px solid rgba(0,0,0,0.05); height: 70px; display: flex; align-items: center; }
+    .nav-inner { max-width:1200px; margin:0 auto; width: 100%; display:flex; justify-content:space-between; align-items:center; padding:0 20px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; min-width: fit-content; }
+    .logo-mark { width:40px; height:40px; }
+    .nav-links { display:flex; gap:20px; align-items: center; }
+    .nav-links a { text-decoration:none; color: var(--text); font-weight:600; font-size: 13px; text-transform: uppercase; white-space: nowrap; }
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 32px; cursor: pointer; color: var(--text); }
 
-    /* CABECERA GATOS */
-    .category-header { 
-      padding: 120px 20px 60px; text-align: center; 
-      background: linear-gradient(to bottom, #ffffff, var(--bg-light));
-    }
-    .category-header h1 { font-size: clamp(32px, 6vw, 48px); margin: 0; color: var(--accent-dark); }
-    .category-header p { max-width: 600px; margin: 15px auto; color: var(--muted); }
-
-    /* FILTROS */
-    .filters { 
-      max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;
-      display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
-    }
-    .filters::-webkit-scrollbar { display: none; }
-    .filter-btn { 
-      padding: 8px 22px; border-radius: 20px; border: 1px solid #e0e0e0;
-      background: white; cursor: pointer; font-size: 14px; transition: 0.3s;
-    }
-    .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-    /* GRID DE PRODUCTOS */
-    .products-grid { 
-      max-width: 1200px; margin: 0 auto 80px; 
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      gap: 30px; padding: 0 20px; 
+    @media (max-width: 1024px) {
+      .mobile-menu-btn { display: block; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: white; padding: 20px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-top: 1px solid #eee; }
+      .nav-links.active { display: flex; }
+      .nav-links a { padding: 15px 0; width: 100%; text-align: center; border-bottom: 1px solid #f5f5f5; }
     }
 
-    .product-card { 
-      background: white; border-radius: 28px; overflow: hidden;
-      display: flex; flex-direction: column; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 1px solid #f0f0f0; position: relative;
-    }
-    .product-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(103, 78, 167, 0.1); }
+    /* HEADER */
+    .category-header { padding: 120px 20px 40px; text-align: center; background: white; }
+    .category-header h1 { color: var(--accent-dark); margin-bottom: 10px; }
+
+    /* GRILLA DE PRODUCTOS CORREGIDA */
+    .sector-title { max-width: 1200px; margin: 40px auto 20px; padding: 0 20px; color: var(--accent-dark); font-size: 28px; border-left: 5px solid var(--accent); }
+    .products-grid { max-width: 1200px; margin: 0 auto 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; padding: 0 20px; }
     
-    .product-badge {
-      position: absolute; top: 15px; left: 15px; background: var(--accent-dark);
-      color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; z-index: 2;
-    }
-
-    .product-img { width: 100%; height: 260px; object-fit: contain; padding: 25px; box-sizing: border-box; }
+    .product-card { background: white; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; border: 1px solid rgba(0,0,0,0.05); position: relative; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(103, 78, 167, 0.1); }
     
-    .product-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
-    .product-info h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); line-height: 1.3; }
-    .product-info p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    .product-badge { position: absolute; top: 10px; left: 10px; background: var(--accent-dark); color: white; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; z-index: 10; }
+    .product-img { width: 100%; height: 220px; object-fit: contain; padding: 15px; background: #fff; }
     
-    .product-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-    .price { font-size: 22px; font-weight: 700; color: var(--accent-dark); }
-
-    .add-btn { 
-      background: var(--accent); color: white; border: none; width: 50px; height: 50px;
-      border-radius: 18px; cursor: pointer; font-size: 24px; transition: 0.3s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .add-btn:hover { background: var(--accent-dark); transform: rotate(90deg); }
+    .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+    .product-info h3 { font-size: 15px; margin: 0 0 10px; min-height: 40px; color: var(--text); }
+    .product-info p { font-size: 12px; color: var(--muted); margin-bottom: 15px; flex-grow: 1; line-height: 1.4; }
+    
+    .product-foot { display: flex; justify-content: space-between; align-items: center; }
+    .price { font-size: 18px; font-weight: 700; color: var(--accent-dark); }
+    .add-btn { background: var(--accent); color: white; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; font-size: 20px; transition: 0.2s; }
+    .add-btn:hover { background: var(--accent-dark); }
 
     /* CARRITO MODAL */
-    .cart-modal { 
-      position: fixed; top: 80px; right: 20px; width: 340px; 
-      background: white; border-radius: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.2);
-      padding: 30px; display: none; z-index: 1100; max-height: 80vh; overflow-y: auto;
-    }
+    .cart-modal { position: fixed; top: 80px; right: 20px; width: 320px; background: white; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); padding: 20px; display: none; z-index: 3000; max-height: 80vh; overflow-y: auto; }
 
     /* WHATSAPP */
-    .wpp-btn { 
-      position: fixed; bottom: 25px; right: 25px; background: #25D366; 
-      width: 60px; height: 60px; border-radius: 50%; display: flex; 
-      align-items: center; justify-content: center; z-index: 1000;
-      box-shadow: 0 10px 25px rgba(37,211,102,0.4); transition: 0.3s;
-    }
+    .wpp-btn { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 10px 25px rgba(37,211,102,0.3); }
 
-    footer { background: #1a1a1a; color: white; padding: 60px 20px; text-align: center; }
+    footer { background: #1a1a1a; color: white; padding: 40px 20px; text-align: center; font-size: 14px; }
   </style>
 </head>
 
@@ -104,18 +71,17 @@
   <nav>
     <div class="nav-inner">
       <a href="index.html" class="brand">
-        <img src="imagenes/lo" class="logo-mark" alt="Dos Hermanos">
-        <h1 style="margin:0; font-size: 20px;">Dos Hermanos</h1>
+        <img src="imagenes/logo.png" class="logo-mark" alt="Dos Hermanos">
+        <h1 style="margin:0; font-size: 18px;">Dos Hermanos</h1>
       </a>
-      <div class="nav-links">
+      <button class="mobile-menu-btn" id="menuToggle">☰</button>
+      <div class="nav-links" id="navLinks">
         <a href="index.html">Inicio</a>
         <a href="perros.html">Perros</a>
-        <a href="accesorios.html">Accesorios y Snacks</a>
+        <a href="accesorios.html">Accesorios</a>
         <a href="antipulgas.html">Antipulgas</a>
         <a href="contacto.html">Contacto</a>
-       <button id="open-cart" style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">
-            🛒 (<span id="cart-count">0</span>)
-        </button>
+        <button id="open-cart" style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">🛒 (<span id="cart-count">0</span>)</button>
       </div>
     </div>
   </nav>
@@ -125,174 +91,176 @@
     <p>Sabemos lo exigentes que son. Por eso ofrecemos una selección de alimentos que cuidan su tracto urinario, su pelaje y, sobre todo, su paladar.</p>
   </header>
 
-
-  <main class="products-grid">
-    <div class="product-card" data-id="g1" data-name="Lager Gatos Castrados 10kg" data-price="1450">
-      <img src="imagenes/lagergatoscastrados.png" class="product-img" alt="Lager Gatos Castrados">
-      <div class="product-info">
-        <h3>Lager Gatos Castrados 10kg</h3>
-        <p>Bajo en calorías y alto en fibra para mantener el peso ideal de tu gato.</p>
-        <div class="product-foot">
-          <div class="price">$ 1.450</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+  <main>
+    <h2 class="sector-title">Alimentos Destacados</h2>
+    <div class="products-grid">
+      <div class="product-card" data-id="g1" data-name="Lager Gatos Castrados 10kg" data-price="1450">
+        <img src="imagenes/lagergatoscastrados.png" class="product-img">
+        <div class="product-info">
+          <h3>Lager Gatos Castrados 10kg</h3>
+          <p>Bajo en calorías y alto en fibra para mantener el peso ideal.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.450</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="product-card" data-id="g2" data-name="Maxine Castrados 7.5kg" data-price="1550">
-      <img src="imagenes/maxinegatosg.webp" class="product-img" alt="Maxine Castrados">
-      <div class="product-info">
-        <h3>Maxine Castrados 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 1.550</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g2" data-name="Maxine Castrados 7.5kg" data-price="1550">
+        <img src="imagenes/maxinegatosg.webp" class="product-img">
+        <div class="product-info">
+          <h3>Maxine Castrados 7.5kg</h3>
+          <p>Sabor irresistible para paladares exigentes.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.550</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="product-card" data-id="g3" data-name="Vittamax Castrados 10kg" data-price="1480">
-      <div class="product-badge" style="background:#e91e63;">¡TOP VENTAS!</div>
-      <img src="imagenes/vitamaxgatocastrado.webp" class="product-img" alt="Vittamax Castrados">
-      <div class="product-info">
-        <h3>Vittamax Castrados 10kg</h3>
-        <p>Alimento completo y balanceado para gatos castrados de 10kg.</p>
-        <div class="product-foot">
-          <div class="price">$ 1.480</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g3" data-name="Vittamax Castrados 10kg" data-price="1480">
+        <div class="product-badge">¡TOP VENTAS!</div>
+        <img src="imagenes/vitamaxgatocastrado.webp" class="product-img">
+        <div class="product-info">
+          <h3>Vittamax Castrados 10kg</h3>
+          <p>Alimento completo y balanceado para el día a día.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.480</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g2" data-name="Equilibrio Castrados 7.5kg" data-price="2250">
-      <div class="product-badge">RECOMENDADO</div>
-      <img src="imagenes/equilibriocastrados.webp" class="product-img" alt="Equilibrio Castrados">
-      <div class="product-info">
-        <h3>Equilibrio Castrados 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 2.250</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g4" data-name="Equilibrio Castrados 7.5kg" data-price="2250">
+        <div class="product-badge">RECOMENDADO</div>
+        <img src="imagenes/equilibriocastrados.webp" class="product-img">
+        <div class="product-info">
+          <h3>Equilibrio Castrados 7.5kg</h3>
+          <p>Nutrición súper premium para gatos exigentes.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.250</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g3" data-name="Balanced Castrados" data-price="1990">
-      <img src="imagenes/balancedgato.png" class="product-img" alt="Balanced Castrados">
-      <div class="product-info">
-        <h3>Balanced Castrados</h3>
-        <p>Alimento completo y balanceado para gatos castrados.</p>
-        <div class="product-foot">
-          <div class="price">$ 1.990</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g5" data-name="Balanced Castrados" data-price="1990">
+        <img src="imagenes/balancedgato.png" class="product-img">
+        <div class="product-info">
+          <h3>Balanced Castrados</h3>
+          <p>Alimento completo y balanceado de alta calidad.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g2" data-name="Gran Plus Castrados 10kg" data-price="1990">
-      <img src="imagenes/granpluscastrado.png" class="product-img" alt="Gran Plus Castrados">
-      <div class="product-info">
-        <h3>Gran Plus Castrados 10kg</h3>
-        <p>Alimento completo y balanceado para gatos castrados de 10kg.</p>
-        <div class="product-foot">
-          <div class="price">$ 1.990</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g6" data-name="Gran Plus Castrados 10kg" data-price="1990">
+        <img src="imagenes/granpluscastrado.png" class="product-img">
+        <div class="product-info">
+          <h3>Gran Plus Castrados 10kg</h3>
+          <p>Nutrición equilibrada para gatos castrados.</p>
+          <div class="product-foot">
+            <div class="price">$ 1.990</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g2" data-name="Frost castrados 8.5kg" data-price="2090">
-      <img src="imagenes/frostcastrados.jpg" class="product-img" alt="Frost castrados 8.5kg">
-      <div class="product-info">
-        <h3>Frost castrados 8.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 8.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 2.090</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g7" data-name="Frost castrados 8.5kg" data-price="2090">
+        <img src="imagenes/frostcastrados.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Frost castrados 8.5kg</h3>
+          <p>Súper premium para mantener la salud urinaria.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.090</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g2" data-name="Three Cats Especial 10kg" data-price="2050">
-      <img src="imagenes/threecatsgatos.webp" class="product-img" alt="Three Cats Especial 10kg">
-      <div class="product-info">
-        <h3>Three Cats Especial 10kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 10kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 2.050</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g8" data-name="Three Cats Especial 10kg" data-price="2050">
+        <img src="imagenes/threecatsgatos.webp" class="product-img">
+        <div class="product-info">
+          <h3>Three Cats Especial 10kg</h3>
+          <p>Gran sabor y nutrición completa de 10kg.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.050</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-     <div class="product-card" data-id="g2" data-name="Balanced Natural 7.5kg" data-price="2490">
-      <img src="imagenes/balancednatural.jpg" class="product-img" alt="Balanced Natural">
-      <div class="product-info">
-        <h3>Balanced Natural 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 2.490</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g9" data-name="Balanced Natural 7.5kg" data-price="2490">
+        <img src="imagenes/balancednatural.jpg" class="product-img">
+        <div class="product-info">
+          <h3>Balanced Natural 7.5kg</h3>
+          <p>Ingredientes naturales para un gato sano.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.490</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="product-card" data-id="g2" data-name="Three Cats Premium 10kg" data-price="2590">
-      <img src="imagenes/threecatsprem.png" class="product-img" alt="Three Cats Premium 10kg">
-      <div class="product-info">
-        <h3>Three Cats Premium 10kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 10kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 2.590</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g10" data-name="Three Cats Premium 10kg" data-price="2590">
+        <img src="imagenes/threecatsprem.png" class="product-img">
+        <div class="product-info">
+          <h3>Three Cats Premium 10kg</h3>
+          <p>Proteína de alta calidad para paladares exigentes.</p>
+          <div class="product-foot">
+            <div class="price">$ 2.590</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="product-card" data-id="g2" data-name="Proplan Urinary 7.5kg" data-price="3390">
-      <img src="imagenes/proplanurinary.webp" class="product-img" alt="Proplan Urinary 7.5kg">
-      <div class="product-info">
-        <h3>Proplan Urinary 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 3.390</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g11" data-name="Proplan Urinary 7.5kg" data-price="3390">
+        <img src="imagenes/proplanurinary.webp" class="product-img">
+        <div class="product-info">
+          <h3>Proplan Urinary 7.5kg</h3>
+          <p>Líder en salud urinaria y prevención.</p>
+          <div class="product-foot">
+            <div class="price">$ 3.390</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="product-card" data-id="g2" data-name="N&D prime 7.5kg" data-price="4450">
-      <img src="imagenes/nydgatoscastrados.webp" class="product-img" alt="N&D prime">
-      <div class="product-info">
-        <h3>N&D prime 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 4.450</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g12" data-name="N&D prime 7.5kg" data-price="4450">
+        <img src="imagenes/nydgatoscastrados.webp" class="product-img">
+        <div class="product-info">
+          <h3>N&D prime 7.5kg</h3>
+          <p>Grain free: sin cereales y con mucha carne.</p>
+          <div class="product-foot">
+            <div class="price">$ 4.450</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="product-card" data-id="g2" data-name="NYD Ocean 7.5kg" data-price="4650">
-      <img src="imagenes/nydocean.webp" class="product-img" alt="NYD Ocean">
-      <div class="product-info">
-        <h3>NYD Ocean 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 4.650</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g13" data-name="NYD Ocean 7.5kg" data-price="4650">
+        <img src="imagenes/nydocean.webp" class="product-img">
+        <div class="product-info">
+          <h3>NYD Ocean 7.5kg</h3>
+          <p>Proteína de pescado de alta calidad.</p>
+          <div class="product-foot">
+            <div class="price">$ 4.650</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="product-card" data-id="g2" data-name="NYD Quinoa 7.5kg" data-price="4850">
-      <img src="imagenes/nydquinoa.webp" class="product-img" alt="NYD Quinoa">
-      <div class="product-info">
-        <h3>NYD Quinoa 7.5kg</h3>
-        <p>Sabor irresistible para los paladares más exigentes. 7.5kg de nutrición pura.</p>
-        <div class="product-foot">
-          <div class="price">$ 4.850</div>
-          <button class="add-btn" onclick="addToCart(this)">+</button>
+      <div class="product-card" data-id="g14" data-name="NYD Quinoa 7.5kg" data-price="4850">
+        <img src="imagenes/nydquinoa.webp" class="product-img">
+        <div class="product-info">
+          <h3>NYD Quinoa 7.5kg</h3>
+          <p>Nutrición funcional de altísima gama.</p>
+          <div class="product-foot">
+            <div class="price">$ 4.850</div>
+            <button class="add-btn" onclick="addToCart(this)">+</button>
+          </div>
         </div>
       </div>
     </div>
@@ -301,12 +269,12 @@
   <aside class="cart-modal" id="cart-modal">
     <h3 style="margin-top:0; color:var(--accent-dark);">Mi Compra</h3>
     <div id="cart-items"></div>
-    <div style="border-top: 2px solid var(--bg-light); padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
+    <div style="border-top: 2px solid #eee; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; font-weight: bold;">
       <span>Total:</span>
       <span>$ <span id="cart-total">0</span></span>
     </div>
-    <button onclick="checkout()" style="width:100%; background:#25D366; color:white; border:none; padding:16px; border-radius:18px; margin-top:20px; font-weight:bold; cursor:pointer; font-size:16px;">
-        Finalizar por WhatsApp
+    <button onclick="checkout()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:12px; margin-top:15px; font-weight:bold; cursor:pointer;">
+        Finalizar pedido WhatsApp
     </button>
   </aside>
 
@@ -315,11 +283,18 @@
   </a>
 
   <footer>
-    <p>© 2026 Dos Hermanos — Especialistas en nutrición felina.</p>
+    <p>© 2019 Dos Hermanos Alimentos. — Montevideo, Uruguay.</p>
   </footer>
 
   <script>
-    // Sistema de Carrito Compartido (usa localStorage para que lo que agregas aquí se vea en otras páginas)
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    menuToggle.onclick = () => {
+      navLinks.classList.toggle('active');
+      menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+    };
+
     let cart = JSON.parse(localStorage.getItem('dh_cart') || '[]');
 
     function saveCart(){
@@ -337,11 +312,11 @@
       cart.forEach((it, idx)=>{
         total += it.price * it.qty;
         itemsEl.innerHTML += `
-          <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center; background:#fcfcfc; padding:10px; border-radius:12px;">
-            <div style="font-size:13px;"><strong>${it.name}</strong><br><small>$${it.price} x ${it.qty}</small></div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center; font-size:13px; background:#f9f9f9; padding:8px; border-radius:10px;">
+            <div><strong>${it.name}</strong><br>$${it.price} x ${it.qty}</div>
             <div style="display:flex; gap:5px;">
-              <button onclick="changeQty(${idx}, -1)" style="border:none; width:25px; height:25px; border-radius:5px; cursor:pointer;">-</button>
-              <button onclick="changeQty(${idx}, 1)" style="border:none; width:25px; height:25px; border-radius:5px; cursor:pointer;">+</button>
+              <button onclick="changeQty(${idx}, -1)" style="border:none; width:22px; border-radius:4px; cursor:pointer;">-</button>
+              <button onclick="changeQty(${idx}, 1)" style="border:none; width:22px; border-radius:4px; cursor:pointer;">+</button>
             </div>
           </div>`;
       });
@@ -370,16 +345,20 @@
 
     function checkout(){
       if(cart.length === 0) return alert('Tu carrito está vacío');
-      let msg = "¡Hola Dos Hermanos! Quiero este pedido para mi gato:\n\n";
+      let msg = "¡Hola Dos Hermanos! Quiero este pedido:\n\n";
       cart.forEach(i => msg += `🐱 ${i.name} (x${i.qty})\n`);
-      msg += `\n*Total a pagar: $${document.getElementById('cart-total').innerText}*`;
+      msg += `\n*Total: $${document.getElementById('cart-total').innerText}*`;
       window.open(`https://wa.me/59897319488?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    document.getElementById('open-cart').onclick = () => {
+    document.getElementById('open-cart').onclick = (e) => {
+      e.stopPropagation();
       const modal = document.getElementById('cart-modal');
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
     };
+
+    window.onclick = () => { document.getElementById('cart-modal').style.display = 'none'; };
+    document.getElementById('cart-modal').onclick = (e) => e.stopPropagation();
 
     renderCart();
   </script>
