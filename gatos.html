@@ -248,14 +248,23 @@
   </footer>
 
  <script>
+// 1. Cargar el carrito desde la memoria del navegador
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// 2. Función para actualizar la visualización (Números y lista)
 function updateCartUI() {
     const cartBody = document.getElementById("cartBody");
     const cartCount = document.getElementById("cart-count");
     const cartTotal = document.getElementById("cartTotal");
+
+    // Actualizar contadores visuales
     if (cartCount) cartCount.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
-    if (cartTotal) cartTotal.textContent = cart.reduce((acc, item) => acc + (item.price * item.qty), 0).toLocaleString();
+    if (cartTotal) {
+        const totalNum = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+        cartTotal.textContent = totalNum.toLocaleString();
+    }
+
+    // Dibujar la lista de productos dentro del carrito
     if (cartBody) {
         if (cart.length === 0) {
             cartBody.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Tu carrito está vacío</p>';
@@ -267,40 +276,52 @@ function updateCartUI() {
                         <div style="font-size:12px; color:#777;">${item.qty} x $${item.price.toLocaleString()}</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <button onclick="changeQty(${index}, -1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px;">-</button>
+                        <button onclick="changeQty(${index}, -1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px; cursor:pointer;">-</button>
                         <span>${item.qty}</span>
-                        <button onclick="changeQty(${index}, 1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px;">+</button>
+                        <button onclick="changeQty(${index}, 1)" style="border:none; background:#eee; padding:2px 8px; border-radius:4px; cursor:pointer;">+</button>
                     </div>
                 </div>`).join('');
         }
     }
+    // Guardar cambios para que se vean en las otras páginas
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// 3. Función para cambiar cantidades (+ / -)
 window.changeQty = (index, delta) => {
     cart[index].qty += delta;
     if (cart[index].qty <= 0) cart.splice(index, 1);
     updateCartUI();
 };
 
+// 4. Escuchador de clics global
 document.addEventListener("click", (e) => {
-    // 3 RAYITAS (MENÚ MÓVIL)
+    // Menu celular
     if (e.target.id === "menuToggle") {
         document.getElementById("navLinks").classList.toggle("active");
-        e.target.innerHTML = document.getElementById("navLinks").classList.contains("active") ? "✕" : "☰";
     }
-    // AGREGAR AL CARRITO
+
+    // BOTÓN AGREGAR (Busca la clase .add-btn)
     if (e.target.classList.contains("add-btn")) {
         const card = e.target.closest(".product-card");
         const name = card.dataset.name;
         const price = parseFloat(card.dataset.price);
+
         const existing = cart.find(i => i.name === name);
-        if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1 }); }
+        if (existing) {
+            existing.qty++;
+        } else {
+            cart.push({ name, price, qty: 1 });
+        }
         updateCartUI();
+        
+        // Efecto visual de éxito
+        const originalText = e.target.textContent;
         e.target.textContent = "✓";
-        setTimeout(() => { e.target.textContent = "+"; }, 800);
+        setTimeout(() => { e.target.textContent = originalText; }, 800);
     }
-    // ABRIR/CERRAR CARRITO
+
+    // ABRIR / CERRAR CARRITO
     if (e.target.id === "open-cart" || e.target.closest("#open-cart")) {
         document.querySelector(".cart-sidebar").classList.add("active");
         document.querySelector(".cart-overlay").classList.add("active");
@@ -309,19 +330,29 @@ document.addEventListener("click", (e) => {
         document.querySelector(".cart-sidebar").classList.remove("active");
         document.querySelector(".cart-overlay").classList.remove("active");
     }
-    // WHATSAPP
+
+    // BOTÓN FINALIZAR (WhatsApp con TOTAL)
     if (e.target.id === "checkoutBtn") {
-        if (cart.length === 0) return alert("Carrito vacío");
-        let msg = "Pedido Dos Hermanos:%0A";
-        cart.forEach(i => msg += `- ${i.name} (x${i.qty})%0A`);
+        if (cart.length === 0) return alert("Tu carrito está vacío");
+
+        const totalFinal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+        let msg = "Hola Dos Hermanos! Mi pedido es:%0A%0A";
+        
+        cart.forEach(item => {
+            msg += `• ${item.name} (x${item.qty}) - $${(item.price * item.qty).toLocaleString()}%0A`;
+        });
+
+        msg += `%0A*TOTAL A PAGAR: $${totalFinal.toLocaleString()}*`;
         window.open(`https://wa.me/59897319488?text=${msg}`, '_blank');
     }
 });
 
+// Inicializar al cargar la página
 document.addEventListener("DOMContentLoaded", updateCartUI);
 </script>
 </body>
 </html>
+
 
 
 
